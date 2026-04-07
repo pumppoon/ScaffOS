@@ -4,10 +4,14 @@ import { Order } from './types';
 
 const orderManager = new OrderManager();
 
+const isValidOrder = (order: Order): boolean => {
+  return order.id && order.type && order.price > 0 && order.quantity > 0;
+};
+
 export const createOrder = (req: Request, res: Response) => {
   try {
     const order: Order = req.body;
-    if (!order.id || !order.type || order.price <= 0 || order.quantity <= 0) {
+    if (!isValidOrder(order)) {
       return res.status(400).send({ error: 'Invalid order data' });
     }
     orderManager.addOrder(order);

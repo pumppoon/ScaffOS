@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
-import { submitOrder } from '../api/orderApi';
 
 const OrderEntry: React.FC = () => {
-    const [orderDetails, setOrderDetails] = useState({ symbol: '', quantity: 0, type: 'buy' });
+  const [order, setOrder] = useState({ symbol: '', quantity: 0, price: 0 });
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await submitOrder(orderDetails);
-        // handle success or error
-    };
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Logic to submit order
+  };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <input type='text' placeholder='Symbol' onChange={(e) => setOrderDetails({ ...orderDetails, symbol: e.target.value })} />
-            <input type='number' placeholder='Quantity' onChange={(e) => setOrderDetails({ ...orderDetails, quantity: +e.target.value })} />
-            <button type='submit'>Place Order</button>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type='text' placeholder='Symbol' onChange={e => setOrder({ ...order, symbol: e.target.value })} />
+      <input type='number' placeholder='Quantity' onChange={e => setOrder({ ...order, quantity: Number(e.target.value) })} />
+      <input type='number' placeholder='Price' onChange={e => setOrder({ ...order, price: Number(e.target.value) })} />
+      <button type='submit'>Submit Order</button>
+    </form>
+  );
 };
 
 export default OrderEntry;

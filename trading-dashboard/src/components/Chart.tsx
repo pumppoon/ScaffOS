@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { fetchChartData } from '../api/chartApi';
 
 const Chart: React.FC = () => {
-    const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState([]);
 
-    useEffect(() => {
-        const loadData = async () => {
-            const result = await fetchChartData();
-            setData(result);
-        };
-        loadData();
-    }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      // Logic to fetch real-time data
+    };
+    fetchData();
+  }, []);
 
-    return <div>{/* Chart rendering logic here using data */}</div>;
+  return <div className='chart'>/* Render chart with data */</div>;
 };
 
 export default Chart;

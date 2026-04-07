@@ -3,15 +3,12 @@ import Chart from './Chart';
 import OrderEntry from './OrderEntry';
 import PositionManager from './PositionManager';
 
-const Dashboard: React.FC = () => {
-    return (
-        <div>
-            <h1>Trading Dashboard</h1>
-            <Chart />
-            <OrderEntry />
-            <PositionManager />
-        </div>
-    );
+export const Dashboard: React.FC = () => {
+  return (
+    <div className="dashboard">
+      <Chart />
+      <OrderEntry />
+      <PositionManager />
+    </div>
+  );
 };
-
-export default Dashboard;

@@ -1,25 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPositions } from '../api/portfolioApi';
 
 const PositionManager: React.FC = () => {
-    const [positions, setPositions] = useState<any[]>([]);
+  const [positions, setPositions] = useState([]);
 
-    useEffect(() => {
-        const loadPositions = async () => {
-            const result = await fetchPositions();
-            setPositions(result);
-        };
-        loadPositions();
-    }, []);
+  useEffect(() => {
+    const fetchPositions = async () => {
+      // Logic to fetch open positions
+    };
+    fetchPositions();
+  }, []);
 
-    return (
-        <div>
-            <h2>Your Positions</h2>
-            {positions.map((position) => (
-                <div key={position.id}>{position.symbol} - {position.quantity}</div>
-            ))}
-        </div>
-    );
+  return <div className='position-manager'>/* Render positions */</div>;
 };
 
 export default PositionManager;

@@ -1,16 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { AnalyticsDashboard } from './components/AnalyticsDashboard';
-import { ComparisonTool } from './components/ComparisonTool';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
 
 const App: React.FC = () => {
     return (
-        <Router>
-            <Switch>
-                <Route path='/' exact component={AnalyticsDashboard} />
-                <Route path='/comparison' component={ComparisonTool} />
-            </Switch>
-        </Router>
+        <div>
+            <h1>Analytics Panel</h1>
+            <AnalyticsDashboard />
+        </div>
     );
 };
 

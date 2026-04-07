@@ -1,20 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
-interface DrawdownChartProps {
-    data: number[];
-}
+const DrawdownChart: React.FC = () => {
+    const [chartData, setChartData] = useState({});
 
-export const DrawdownChart: React.FC<DrawdownChartProps> = ({ data }) => {
-    const chartData = {
-        labels: data.map((_, index) => index + 1),
-        datasets: [{
-            label: 'Drawdown',
-            data,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            fill: false,
-        }],
-    };
+    useEffect(() => {
+        // Fetch drawdown chart data
+        const fetchData = async () => {
+            const response = await fetch('/api/drawdown');
+            const result = await response.json();
+            setChartData(result);
+        };
+        fetchData();
+    }, []);
 
-    return <Line data={chartData} />;
+    return (
+        <div>
+            <h2>Drawdown Chart</h2>
+            <Line data={chartData} />
+        </div>
+    );
 };
+
+export default DrawdownChart;

@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { fetchPerformanceMetrics } from '../api/analytics';
-import { DrawdownChart } from './DrawdownChart';
+import React from 'react';
+import StrategyPerformance from './StrategyPerformance';
+import DrawdownChart from './DrawdownChart';
+import ComparisonTools from './ComparisonTools';
 
-export const AnalyticsDashboard: React.FC = () => {
-    const [metrics, setMetrics] = useState(null);
-
-    useEffect(() => {
-        const loadMetrics = async () => {
-            const data = await fetchPerformanceMetrics();
-            setMetrics(data);
-        };
-        loadMetrics();
-    }, []);
-
-    if (!metrics) return <div>Loading...</div>;
-
+const AnalyticsDashboard: React.FC = () => {
     return (
         <div>
-            <h1>Strategy Performance</h1>
-            <DrawdownChart data={metrics.drawdown} />
-            {/* Additional metrics display can go here */}
+            <StrategyPerformance />
+            <DrawdownChart />
+            <ComparisonTools />
         </div>
     );
 };
+
+export default AnalyticsDashboard;

@@ -1,10 +1,12 @@
 import React from 'react';
+import HealthGrid from './HealthGrid';
+import ConfigurationManager from './ConfigurationManager';
 
 const Dashboard: React.FC = () => {
     return (
         <div>
-            <h1>Admin Dashboard</h1>
-            <p>Overview of system health and metrics.</p>
+            <HealthGrid />
+            <ConfigurationManager />
         </div>
     );
 };

@@ -1,5 +1,6 @@
 import express from 'express';
 import { collectDefaultMetrics, register, Counter } from 'prom-client';
+import { v4 as uuidv4 } from 'uuid';
 
 const metricsRouter = express.Router();
 
@@ -8,7 +9,9 @@ collectDefaultMetrics();
 
 // Health check endpoint
 metricsRouter.get('/health', (req, res) => {
-    res.status(200).send({ status: 'UP' });
+    const traceId = uuidv4();
+    console.log(`Health check requested - Trace ID: ${traceId}`);
+    res.status(200).send({ status: 'UP', traceId });
 });
 
 // Metrics endpoint

@@ -1,15 +1,1 @@
-import express from 'express'; import { BacktestController } from './backtestController';
-
-const app = express();
-const port = 3000;
-
-app.use(express.json());
-
-const backtestController = new BacktestController();
-
-app.post('/backtest', backtestController.runBacktest.bind(backtestController));
-app.get('/results/:id', backtestController.getResults.bind(backtestController));
-
-app.listen(port, () => {
-    console.log(`Backtester service listening at http://localhost:${port}`);
-});
+import express from 'express'; import { BacktestController } from './backtestController'; import { Prometheus } from 'prom-client'; const app = express(); const port = 3000; app.use(express.json()); const backtestController = new BacktestController(); const metrics = new Prometheus.Registry(); const httpRequestDurationMicroseconds = new Prometheus.Histogram({ name: 'http_request_duration_seconds', help: 'Duration of HTTP requests in seconds', labelNames: ['route'], buckets: [0.1, 0.5, 1, 2, 5] }); metrics.registerMetric(httpRequestDurationMicroseconds); app.post('/backtest', async (req, res) => { const end = httpRequestDurationMicroseconds.startTimer(); try { const results = await backtestController.runBacktest(req); res.status(200).json(results); } finally { end({ route: '/backtest' }); } }); app.get('/results/:id', async (req, res) => { const end = httpRequestDurationMicroseconds.startTimer(); try { const result = await backtestController.getResults(req); res.status(200).json(result); } finally { end({ route: '/results/:id' }); } }); app.get('/health', (req, res) => { res.status(200).json({ status: 'UP' }); }); app.get('/metrics', async (req, res) => { res.set('Content-Type', metrics.contentType); res.end(await metrics.metrics()); }); app.listen(port, () => { console.log(`Backtester service listening at http://localhost:${port}`); });

@@ -2,11 +2,13 @@ import express from 'express';
 import { healthCheck } from './healthCheck';
 import { latencyTracker } from './latencyTracker';
 import monitorEvents from './eventListener';
+import { getMetrics } from './metrics';
 
 const app = express();
 
 app.use(latencyTracker);
 app.get('/health', healthCheck);
+app.get('/metrics', getMetrics);
 
 monitorEvents();
 

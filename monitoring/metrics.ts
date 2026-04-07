@@ -1,0 +1,23 @@
+import { Counter, Histogram } from 'prom-client';
+
+const requestCounter = new Counter({
+    name: 'http_requests_total',
+    help: 'Total number of HTTP requests',
+    labelNames: ['method', 'route'],
+});
+
+const latencyHistogram = new Histogram({
+    name: 'http_request_duration_seconds',
+    help: 'Histogram of HTTP request duration in seconds',
+    labelNames: ['method', 'route'],
+});
+
+export const trackRequest = (method: string, route: string, duration: number) => {
+    requestCounter.inc({ method, route });
+    latencyHistogram.observe(duration / 1000);
+};
+
+export const getMetrics = async (req, res) => {
+    res.set('Content-Type', prometheus.register.contentType);
+    res.end(await prometheus.register.metrics());
+};

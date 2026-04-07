@@ -1,20 +1,9 @@
-import { Request, Response } from 'express';
-import axios from 'axios';
-
-export const getAllocations = async (req: Request, res: Response) => {
+export const getHistoricalPerformance = async (req: Request, res: Response) => {
+  const { portfolioId } = req.query;
   try {
-    const response = await axios.get('http://order-engine/api/allocations');
+    const response = await axios.get(`http://order-engine/api/historical-performance?portfolioId=${portfolioId}`);
     res.json(response.data);
   } catch (error) {
-    res.status(500).send('Error fetching allocations');
-  }
-};
-
-export const getPnL = async (req: Request, res: Response) => {
-  try {
-    const response = await axios.get('http://order-engine/api/pnl');
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).send('Error fetching PnL');
+    res.status(500).send('Error fetching historical performance');
   }
 };

@@ -2,17 +2,24 @@ import { Request, Response } from 'express';
 import axios from 'axios';
 import { query } from 'express-validator';
 import { PortfolioId } from './types';
+import NodeCache from 'node-cache';
 
-/**
- * Fetches the historical performance for a given portfolio.
- * @param req - The request object containing the portfolioId.
- * @param res - The response object to send the results.
- */
+const cache = new NodeCache({ stdTTL: 600 }); // Cache for 10 minutes
+
 export const getHistoricalPerformance = async (req: Request, res: Response): Promise<void> => {
   await query('portfolioId').isString().trim().escape().run(req);
   const { portfolioId } = req.query as unknown as { portfolioId: PortfolioId };
+  const cacheKey = `historical_performance_${portfolioId}`;
+
+  // Check if data is in cache
+  const cachedData = cache.get(cacheKey);
+  if (cachedData) {
+    return res.json(cachedData);
+  }
+
   try {
     const response = await axios.get(`${config.orderEngineUrl}/historical-performance?portfolioId=${portfolioId}`);
+    cache.set(cacheKey, response.data);
     res.json(response.data);
   } catch (error) {
     res.status(500).send('Error fetching historical performance');

@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { log } from '../utils/logger';
 
 const StrategyPerformance: React.FC = () => {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        // Fetch strategy performance data
         const fetchData = async () => {
-            const response = await fetch('/api/strategy-performance');
-            const result = await response.json();
-            setData(result);
+            const requestId = Math.random().toString(36).substring(2);
+            log('Fetching strategy performance data', { requestId });
+            const startTime = performance.now();
+            try {
+                const response = await fetch('/api/strategy-performance');
+                if (!response.ok) {
+                    throw new Error(`Error fetching data: ${response.statusText}`);
+                }
+                const result = await response.json();
+                setData(result);
+                const endTime = performance.now();
+                log('Successfully fetched data', { requestId, duration: endTime - startTime });
+            } catch (error) {
+                log('Error fetching strategy performance data', { requestId, error: error.message });
+            }
         };
         fetchData();
     }, []);

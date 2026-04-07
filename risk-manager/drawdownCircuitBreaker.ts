@@ -1,29 +1,30 @@
-export class DrawdownCircuitBreaker {
-  private threshold: number;
-  private currentDrawdown: number;
-  private isActive: boolean;
+class DrawdownCircuitBreaker {
+    private drawdownThreshold: number;
+    private currentDrawdown: number;
+    private isTriggered: boolean;
 
-  constructor(threshold: number) {
-    this.threshold = threshold;
-    this.currentDrawdown = 0;
-    this.isActive = false;
-  }
-
-  updateDrawdown(currentValue: number, previousValue: number) {
-    const drawdown = ((previousValue - currentValue) / previousValue) * 100;
-    this.currentDrawdown = Math.max(this.currentDrawdown, drawdown);
-    this.checkCircuit();
-  }
-
-  checkCircuit() {
-    if (this.currentDrawdown >= this.threshold) {
-      this.isActive = true;
-      // Logic to halt trading
+    constructor(threshold: number) {
+        this.drawdownThreshold = threshold;
+        this.currentDrawdown = 0;
+        this.isTriggered = false;
     }
-  }
 
-  reset() {
-    this.currentDrawdown = 0;
-    this.isActive = false;
-  }
+    updateDrawdown(newDrawdown: number) {
+        this.currentDrawdown = newDrawdown;
+        if (this.currentDrawdown >= this.drawdownThreshold) {
+            this.trigger();
+        }
+    }
+
+    trigger() {
+        this.isTriggered = true;
+        // Logic to halt trading or alert.
+    }
+
+    reset() {
+        this.isTriggered = false;
+        this.currentDrawdown = 0;
+    }
 }
+
+export default DrawdownCircuitBreaker;

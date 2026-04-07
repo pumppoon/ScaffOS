@@ -1,17 +1,17 @@
 import { EventEmitter } from 'events';
 
-export class RiskAlerting {
-  private eventEmitter: EventEmitter;
+class RiskAlerting extends EventEmitter {
+    constructor() {
+        super();
+    }
 
-  constructor() {
-    this.eventEmitter = new EventEmitter();
-  }
+    alert(message: string) {
+        this.emit('riskAlert', message);
+    }
 
-  onRiskAlert(callback: (message: string) => void) {
-    this.eventEmitter.on('riskAlert', callback);
-  }
-
-  triggerRiskAlert(message: string) {
-    this.eventEmitter.emit('riskAlert', message);
-  }
+    onAlert(listener: (message: string) => void) {
+        this.on('riskAlert', listener);
+    }
 }
+
+export default RiskAlerting;

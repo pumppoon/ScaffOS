@@ -1,10 +1,10 @@
-import { Alert } from '../schemas/alert.schema';
+import { SharedAlert } from '../schemas/shared.types';
 import { EventEmitter } from 'events';
 
 class AlertService extends EventEmitter {
-    private alerts: Alert[] = [];
+    private alerts: SharedAlert[] = [];
 
-    public createAlert(alert: Alert) {
+    public createAlert(alert: SharedAlert) {
         try {
             this.validateAlert(alert);
             this.alerts.push(alert);
@@ -14,7 +14,7 @@ class AlertService extends EventEmitter {
         }
     }
 
-    private validateAlert(alert: Alert) {
+    private validateAlert(alert: SharedAlert) {
         if (!alert.id || !alert.type || !alert.message || alert.threshold < 0) {
             throw new Error('Invalid alert properties');
         }

@@ -1,0 +1,1 @@
+export interface SharedAlert { id: string; type: string; message: string; threshold: number; timestamp: Date; }

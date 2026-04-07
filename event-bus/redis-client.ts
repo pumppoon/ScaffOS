@@ -1,8 +1,9 @@
 import { RedisClient } from 'redis';
+import { config } from './config';
 
 export const createRedisClient = (): RedisClient => {
     return new RedisClient({
-        host: 'localhost',
-        port: 6379,
+        host: config.redisHost,
+        port: config.redisPort,
     });
 };

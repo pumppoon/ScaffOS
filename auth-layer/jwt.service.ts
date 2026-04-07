@@ -22,9 +22,10 @@ export const generateToken = (userId: string): string => {
 };
 
 export const verifyToken = (token: string): any => {
+    const start = Date.now();
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        loggerTokenAction('verified', null, token);
+        loggerTokenAction('verified', null, token, start);
         return decoded;
     } catch (error) {
         logger.error('Token verification failed', { token, error: error.message });
@@ -32,6 +33,7 @@ export const verifyToken = (token: string): any => {
     }
 };
 
-const loggerTokenAction = (action: string, userId: string | null, token: string) => {
-    logger.info(`Token ${action}`, { userId, token });
+const loggerTokenAction = (action: string, userId: string | null, token: string, startTime?: number) => {
+    const duration = startTime ? Date.now() - startTime : undefined;
+    logger.info(`Token ${action}`, { userId, token, duration });
 };

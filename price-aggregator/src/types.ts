@@ -1,9 +1,8 @@
 export interface PriceData {
   exchange: string;
+  symbol: string;
   price: number;
-  volume: number;
+  timestamp: number;
 }
 
-export interface CurrentPrices {
-  [key: string]: number;
-}
+export type Client = WebSocket;

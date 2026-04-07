@@ -1,22 +1,21 @@
 import express from 'express';
 import { Server } from 'ws';
-import http from 'http';
 import { PriceAggregator } from './priceAggregator';
 
 const app = express();
-const server = http.createServer(app);
-const wss = new Server({ server });
+const PORT = process.env.PORT || 3000;
 
-const priceAggregator = new PriceAggregator();
+const server = app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
+const wss = new Server({ server });
+const aggregator = new PriceAggregator(wss);
 
 app.get('/prices', (req, res) => {
-  res.json(priceAggregator.getCurrentPrices());
+  res.json(aggregator.getCurrentPrices());
 });
 
 wss.on('connection', (ws) => {
-  priceAggregator.subscribe(ws);
-});
-
-server.listen(3000, () => {
-  console.log('Price aggregator service running on port 3000');
+  aggregator.addClient(ws);
 });

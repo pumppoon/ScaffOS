@@ -1,51 +1,39 @@
-import WebSocket from 'ws';
-
-interface PriceData {
-  exchange: string;
-  price: number;
-  volume: number;
-}
+import { WebSocket } from 'ws';
+import { PriceData, Client } from './types';
 
 export class PriceAggregator {
   private prices: PriceData[] = [];
-  private currentPrices: Record<string, number> = {};
+  private clients: Client[] = [];
 
-  constructor() {
-    this.startPriceFetch();
+  constructor(private wss: WebSocket.Server) {}
+
+  addClient(client: Client) {
+    this.clients.push(client);
+    client.on('close', () => this.removeClient(client));
   }
 
-  private startPriceFetch() {
-    // Simulated fetching from exchanges
-    setInterval(() => {
-      this.fetchPrices();
-      this.calculateVWAP();
-    }, 5000);
+  removeClient(client: Client) {
+    this.clients = this.clients.filter(c => c !== client);
   }
 
-  private fetchPrices() {
-    // Fetch prices from exchanges and update this.prices
-    // For now, we will simulate random prices
-    this.prices.push({ exchange: 'exchange1', price: Math.random() * 100, volume: Math.random() * 100 });
-    // Update current prices
-    this.currentPrices['exchange1'] = this.prices[this.prices.length - 1].price;
+  updatePrice(priceData: PriceData) {
+    this.prices.push(priceData);
+    this.broadcast(priceData);
   }
 
-  private calculateVWAP() {
-    const totalValue = this.prices.reduce((acc, p) => acc + p.price * p.volume, 0);
-    const totalVolume = this.prices.reduce((acc, p) => acc + p.volume, 0);
-    const vwap = totalValue / totalVolume;
-    this.currentPrices['VWAP'] = vwap;
-  }
-
-  public getCurrentPrices() {
-    return this.currentPrices;
-  }
-
-  public subscribe(ws: WebSocket) {
-    ws.on('close', () => {
-      // Handle WebSocket close
+  broadcast(priceData: PriceData) {
+    this.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify(priceData));
+      }
     });
-    // Send current prices to the client
-    ws.send(JSON.stringify(this.getCurrentPrices()));
+  }
+
+  getCurrentPrices() {
+    return this.prices;
+  }
+
+  calculateVWAP() {
+    // Implement VWAP calculation logic here
   }
 }

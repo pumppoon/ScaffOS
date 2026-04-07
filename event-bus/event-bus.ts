@@ -1,5 +1,5 @@
-export interface EventBus {
-    publish(event: string, data: any): Promise<void>;
-    subscribe(event: string, listener: (data: any) => void): Promise<void>;
-    getLatestData(event: string): Promise<any | null>;
+export interface EventBus<T = unknown> {
+    publish(event: string, data: T): Promise<void>;
+    subscribe(event: string, listener: (data: T) => void): Promise<void>;
+    getLatestData(event: string): Promise<T | null>;
 }

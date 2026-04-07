@@ -6,8 +6,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-app.get('/health', (req, res) => {
-  res.status(200).send('Order Engine is healthy!');
+// Placeholder for routes
+app.get('/', (req, res) => {
+  res.send('Order Engine is running');
 });
 
 app.listen(PORT, () => {

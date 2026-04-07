@@ -1,14 +1,15 @@
+export type OrderType = 'limit' | 'market' | 'stop';
+
 export interface Order {
   id: string;
-  type: 'limit' | 'market' | 'stop';
+  type: OrderType;
   price: number;
   quantity: number;
-  status: 'open' | 'filled' | 'cancelled';
+  timestamp: Date;
 }
 
 export interface LimitOrder extends Order {
   type: 'limit';
-  limitPrice: number;
 }
 
 export interface MarketOrder extends Order {

@@ -11,19 +11,29 @@ class DrawdownCircuitBreaker {
 
     updateDrawdown(newDrawdown: number) {
         this.currentDrawdown = newDrawdown;
+        this.checkTrigger();
+    }
+
+    checkTrigger() {
         if (this.currentDrawdown >= this.drawdownThreshold) {
             this.trigger();
         }
     }
 
     trigger() {
-        this.isTriggered = true;
-        // Logic to halt trading or alert.
+        if (!this.isTriggered) {
+            this.isTriggered = true;
+            // Logic to halt trading or alert.
+        }
     }
 
     reset() {
         this.isTriggered = false;
         this.currentDrawdown = 0;
+    }
+
+    getCurrentDrawdown(): number {
+        return this.currentDrawdown;
     }
 }
 

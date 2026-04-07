@@ -1,4 +1,5 @@
 import { Position } from './types';
+import config from './config';
 
 class PositionLimit {
     private limits: Map<string, number>;
@@ -19,7 +20,7 @@ class PositionLimit {
         if (this.cache.has(position.symbol)) {
             return this.cache.get(position.symbol)!;
         }
-        const limit = this.limits.get(position.symbol) || Infinity;
+        const limit = this.limits.get(position.symbol) || config.POSITION_LIMIT_DEFAULT;
         const isWithinLimit = position.amount <= limit;
         this.cache.set(position.symbol, isWithinLimit);
         return isWithinLimit;

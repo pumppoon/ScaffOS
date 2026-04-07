@@ -26,7 +26,10 @@ export const getHistoricalPerformance = async (req: Request, res: Response): Pro
   }
 
   try {
-    const response = await axios.get(`${config.orderEngineUrl}/historical-performance?portfolioId=${portfolioId}`);
+    const response = await axios.get(`${config.orderEngineUrl}/historical-performance`, {
+      params: { portfolioId },
+      validateStatus: (status) => status < 500 // Only reject if status >= 500
+    });
     setCacheData(cacheKey, response.data);
     res.json(response.data);
   } catch (error) {

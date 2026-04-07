@@ -1,16 +1,12 @@
 import express from 'express';
-import { json } from 'body-parser';
-import { connectToEventBus } from './eventBus';
-import portfolioRoutes from './routes/portfolioRoutes';
+import { createServer } from './server';
+import { setupRoutes } from './routes';
 
 const app = express();
-app.use(json());
-
-connectToEventBus();
-
-app.use('/api/portfolios', portfolioRoutes);
-
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+
+setupRoutes(app);
+
+createServer(app).listen(PORT, () => {
   console.log(`Portfolio Tracker service running on port ${PORT}`);
 });

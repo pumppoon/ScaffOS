@@ -1,5 +1,6 @@
 import { WebSocket } from 'ws';
 import { PriceData, Client } from './types';
+import { logRequest, logResponse, logError } from './logger';
 
 export class PriceAggregator {
   private prices: PriceData[] = [];
@@ -8,6 +9,8 @@ export class PriceAggregator {
   constructor(private wss: WebSocket.Server) {}
 
   addClient(client: Client) {
+    const reqId = client.clientId;
+    logRequest(reqId, 'CONNECT', '');
     this.clients.push(client);
     client.on('close', () => this.removeClient(client));
   }
@@ -17,8 +20,11 @@ export class PriceAggregator {
   }
 
   updatePrice(priceData: PriceData) {
+    const start = Date.now();
     this.prices.push(priceData);
     this.broadcast(priceData);
+    const duration = Date.now() - start;
+    logResponse(priceData.symbol, 'UPDATE', priceData.symbol, duration);
   }
 
   broadcast(priceData: PriceData) {

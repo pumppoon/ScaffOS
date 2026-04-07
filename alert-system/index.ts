@@ -1,1 +1,14 @@
-import { EventBus } from '../event-bus'; import { AlertProcessor } from './alert.processor'; import { AlertConfiguration } from './alert.config'; import { HealthCheck } from './health-check'; const eventBus = new EventBus(); const alertProcessor = new AlertProcessor(eventBus); const alertConfig = new AlertConfiguration({ thresholds: { price: 100, risk: 50 } }); HealthCheck.checkServices(['webhook', 'email', 'websocket']);
+import { alertService } from './services/alert.service';
+import { WebhookNotifier } from './notifiers/webhook.notifier';
+import { EmailNotifier } from './notifiers/email.notifier';
+import { WebSocketNotifier } from './notifiers/websocket.notifier';
+
+const webhookNotifier = new WebhookNotifier('http://example.com/webhook');
+const emailNotifier = new EmailNotifier({/* SMTP config */});
+const websocketNotifier = new WebSocketNotifier(/* HTTP server */);
+
+alertService.on(ALERT_PUBLISHED, async (event) => {
+    await webhookNotifier.send(event.alert);
+    await emailNotifier.send(event.alert);
+    websocketNotifier.send(event.alert);
+});

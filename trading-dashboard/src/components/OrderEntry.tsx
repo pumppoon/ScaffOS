@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { submitOrder } from '../services/tradingService';
 
+interface OrderDetails {
+  symbol: string;
+  quantity: number;
+  price: number;
+}
+
 const OrderEntry: React.FC = () => {
-  const [orderDetails, setOrderDetails] = useState({ symbol: '', quantity: 0, price: 0 });
+  const [orderDetails, setOrderDetails] = useState<OrderDetails>({ symbol: '', quantity: 0, price: 0 });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

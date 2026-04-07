@@ -1,13 +1,26 @@
 import axios from 'axios';
 
-export const tradingService = {
-  fetchRealTimeData: async () => {
-    // Logic to fetch trading data
-  },
-  submitOrder: async (order: any) => {
-    // Logic to submit order
-  },
-  fetchPositions: async () => {
-    // Logic to fetch positions
-  },
+/**
+ * Fetch real-time trading data.
+ * @returns {Promise<any>} The trading data.
+ */
+export const fetchRealTimeData = async (): Promise<any> => {
+  // Logic to fetch trading data
+};
+
+/**
+ * Submit an order.
+ * @param {OrderDetails} order - The order details to be submitted.
+ * @returns {Promise<void>} 
+ */
+export const submitOrder = async (order: OrderDetails): Promise<void> => {
+  // Logic to submit order
+};
+
+/**
+ * Fetch open positions.
+ * @returns {Promise<any>} The open positions.
+ */
+export const fetchPositions = async (): Promise<any> => {
+  // Logic to fetch positions
 };

@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
+import { submitOrder } from '../services/tradingService';
 
 const OrderEntry: React.FC = () => {
-  const [order, setOrder] = useState({ symbol: '', quantity: 0, price: 0 });
+  const [orderDetails, setOrderDetails] = useState({ symbol: '', quantity: 0, price: 0 });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setOrderDetails(prev => ({ ...prev, [name]: name === 'quantity' || name === 'price' ? Number(value) : value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic to submit order
+    await submitOrder(orderDetails);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type='text' placeholder='Symbol' onChange={e => setOrder({ ...order, symbol: e.target.value })} />
-      <input type='number' placeholder='Quantity' onChange={e => setOrder({ ...order, quantity: Number(e.target.value) })} />
-      <input type='number' placeholder='Price' onChange={e => setOrder({ ...order, price: Number(e.target.value) })} />
+      <input type='text' name='symbol' placeholder='Symbol' onChange={handleInputChange} />
+      <input type='number' name='quantity' placeholder='Quantity' onChange={handleInputChange} />
+      <input type='number' name='price' placeholder='Price' onChange={handleInputChange} />
       <button type='submit'>Submit Order</button>
     </form>
   );

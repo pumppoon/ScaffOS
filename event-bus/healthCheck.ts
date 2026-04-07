@@ -7,7 +7,6 @@ const checkHealth = async () => {
         console.log('Redis is healthy');
     } catch (error) {
         console.error('Redis connection failed', error);
-        // Optionally implement a retry mechanism or alerting system here
     }
 };
 

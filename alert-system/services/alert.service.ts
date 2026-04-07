@@ -5,8 +5,19 @@ class AlertService extends EventEmitter {
     private alerts: Alert[] = [];
 
     public createAlert(alert: Alert) {
-        this.alerts.push(alert);
-        this.emit(ALERT_PUBLISHED, { alert });
+        try {
+            this.validateAlert(alert);
+            this.alerts.push(alert);
+            this.emit(ALERT_PUBLISHED, { alert });
+        } catch (error) {
+            console.error('Error creating alert:', error);
+        }
+    }
+
+    private validateAlert(alert: Alert) {
+        if (!alert.id || !alert.type || !alert.message || alert.threshold < 0) {
+            throw new Error('Invalid alert properties');
+        }
     }
 }
 

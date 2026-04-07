@@ -9,6 +9,10 @@ export class WebhookNotifier {
     }
 
     public async send(alert: Alert) {
-        await axios.post(this.url, alert);
+        try {
+            await axios.post(this.url, alert);
+        } catch (error) {
+            console.error('Error sending alert to webhook:', error);
+        }
     }
 }

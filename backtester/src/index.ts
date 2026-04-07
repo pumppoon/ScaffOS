@@ -1,12 +1,15 @@
-import express from 'express';
-import { backtestRouter } from './routes/backtest';
+import express from 'express'; import { BacktestController } from './backtestController';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3000;
 
 app.use(express.json());
-app.use('/api/backtest', backtestRouter);
 
-app.listen(PORT, () => {
-  console.log(`Backtester service running on port ${PORT}`);
+const backtestController = new BacktestController();
+
+app.post('/backtest', backtestController.runBacktest.bind(backtestController));
+app.get('/results/:id', backtestController.getResults.bind(backtestController));
+
+app.listen(port, () => {
+    console.log(`Backtester service listening at http://localhost:${port}`);
 });
